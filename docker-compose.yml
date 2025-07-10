@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  nodered:
+    image: nodered/node-red:latest
+    container_name: autoserv-nodered
+    ports:
+      - "1881:1880"
+    volumes:
+      - ./node-red-data:/data
+    restart: unless-stopped
+    user: "1000:1000"
+    
+  strapi:
+    image: strapi/strapi:latest
+    container_name: autoserv-strapi
+    restart: unless-stopped
+    environment:
+      DATABASE_CLIENT: sqlite
+      DATABASE_NAME: strapi
+      DATABASE_FILENAME: /srv/app/.tmp/data.db
+    volumes:
+      - ./app:/srv/app
+    ports:
+      - "1337:1337"

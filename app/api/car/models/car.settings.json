@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cars",
+  "info": {
+    "name": "Car"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "VIN": {
+      "type": "string"
+    },
+    "plateNumber": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "year": {
+      "type": "date"
+    },
+    "etc": {
+      "type": "string"
+    },
+    "work_order": {
+      "via": "car",
+      "model": "work-order"
+    }
+  }
+}
