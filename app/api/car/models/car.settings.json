@@ -26,9 +26,9 @@
     "etc": {
       "type": "string"
     },
-    "work_order": {
+    "car_projects": {
       "via": "car",
-      "model": "work-order"
+      "collection": "car-project"
     }
   }
 }

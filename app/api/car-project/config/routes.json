@@ -2,48 +2,48 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/services",
-      "handler": "service.find",
+      "path": "/car-projects",
+      "handler": "car-project.find",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/services/count",
-      "handler": "service.count",
+      "path": "/car-projects/count",
+      "handler": "car-project.count",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/services/:id",
-      "handler": "service.findOne",
+      "path": "/car-projects/:id",
+      "handler": "car-project.findOne",
       "config": {
         "policies": []
       }
     },
     {
       "method": "POST",
-      "path": "/services",
-      "handler": "service.create",
+      "path": "/car-projects",
+      "handler": "car-project.create",
       "config": {
         "policies": []
       }
     },
     {
       "method": "PUT",
-      "path": "/services/:id",
-      "handler": "service.update",
+      "path": "/car-projects/:id",
+      "handler": "car-project.update",
       "config": {
         "policies": []
       }
     },
     {
       "method": "DELETE",
-      "path": "/services/:id",
-      "handler": "service.delete",
+      "path": "/car-projects/:id",
+      "handler": "car-project.delete",
       "config": {
         "policies": []
       }

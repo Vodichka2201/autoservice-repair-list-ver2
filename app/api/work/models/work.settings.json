@@ -1,8 +1,9 @@
 {
   "kind": "collectionType",
-  "collectionName": "services",
+  "collectionName": "works",
   "info": {
-    "name": "Service"
+    "name": "Work",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -14,21 +15,21 @@
     "name": {
       "type": "string"
     },
-    "description": {
-      "type": "text"
+    "status": {
+      "type": "string"
     },
-    "timeSpent": {
-      "type": "integer"
+    "completionDate": {
+      "type": "datetime"
     },
-    "hourlyRate": {
+    "totalTime": {
       "type": "float"
     },
     "totalCost": {
-      "type": "decimal"
+      "type": "float"
     },
-    "work_orders": {
-      "via": "services",
-      "collection": "work-order"
+    "car_project": {
+      "via": "works",
+      "model": "car-project"
     }
   }
 }

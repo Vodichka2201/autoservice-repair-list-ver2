@@ -2,48 +2,48 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/work-orders",
-      "handler": "work-order.find",
+      "path": "/mechanics",
+      "handler": "mechanic.find",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/work-orders/count",
-      "handler": "work-order.count",
+      "path": "/mechanics/count",
+      "handler": "mechanic.count",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/work-orders/:id",
-      "handler": "work-order.findOne",
+      "path": "/mechanics/:id",
+      "handler": "mechanic.findOne",
       "config": {
         "policies": []
       }
     },
     {
       "method": "POST",
-      "path": "/work-orders",
-      "handler": "work-order.create",
+      "path": "/mechanics",
+      "handler": "mechanic.create",
       "config": {
         "policies": []
       }
     },
     {
       "method": "PUT",
-      "path": "/work-orders/:id",
-      "handler": "work-order.update",
+      "path": "/mechanics/:id",
+      "handler": "mechanic.update",
       "config": {
         "policies": []
       }
     },
     {
       "method": "DELETE",
-      "path": "/work-orders/:id",
-      "handler": "work-order.delete",
+      "path": "/mechanics/:id",
+      "handler": "mechanic.delete",
       "config": {
         "policies": []
       }

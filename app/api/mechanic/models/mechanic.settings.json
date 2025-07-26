@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mechanics",
+  "info": {
+    "name": "Mechanic"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "FIO": {
+      "type": "string"
+    },
+    "tag": {
+      "type": "string"
+    },
+    "hourly_rate": {
+      "type": "float"
+    }
+  }
+}

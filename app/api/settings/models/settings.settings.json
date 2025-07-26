@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "settings",
+  "info": {
+    "name": "Settings",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "key": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "value": {
+      "type": "text",
+      "required": true
+    }
+  }
+}
