@@ -30,6 +30,10 @@
     "car_project": {
       "via": "works",
       "model": "car-project"
+    },
+    "workers": {
+      "via": "works",
+      "collection": "worker"
     }
   }
 }

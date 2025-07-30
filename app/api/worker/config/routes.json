@@ -2,48 +2,48 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/mechanics",
-      "handler": "mechanic.find",
+      "path": "/workers",
+      "handler": "worker.find",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/mechanics/count",
-      "handler": "mechanic.count",
+      "path": "/workers/count",
+      "handler": "worker.count",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/mechanics/:id",
-      "handler": "mechanic.findOne",
+      "path": "/workers/:id",
+      "handler": "worker.findOne",
       "config": {
         "policies": []
       }
     },
     {
       "method": "POST",
-      "path": "/mechanics",
-      "handler": "mechanic.create",
+      "path": "/workers",
+      "handler": "worker.create",
       "config": {
         "policies": []
       }
     },
     {
       "method": "PUT",
-      "path": "/mechanics/:id",
-      "handler": "mechanic.update",
+      "path": "/workers/:id",
+      "handler": "worker.update",
       "config": {
         "policies": []
       }
     },
     {
       "method": "DELETE",
-      "path": "/mechanics/:id",
-      "handler": "mechanic.delete",
+      "path": "/workers/:id",
+      "handler": "worker.delete",
       "config": {
         "policies": []
       }
