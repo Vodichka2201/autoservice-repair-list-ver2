@@ -1,5 +1,34 @@
 services:
-  nodered:
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=ax.rudin@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--serverstransport.insecureskipverify=true"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: always
+    networks:
+      - autoserv-net
+
+  nodered:    
     image: nodered/node-red:latest
     container_name: autoserv-nodered
     ports:
@@ -12,6 +41,12 @@ services:
     user: "1000:1000"
     networks:
       - autoserv-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nodered.rule=Host(`api.ti-soft.ru`)"
+      - "traefik.http.routers.nodered.entrypoints=websecure"
+      - "traefik.http.routers.nodered.tls.certresolver=myresolver"
+      - "traefik.http.services.nodered.loadBalancer.server.port=1880"
     
   strapi:
     image: strapi/strapi:latest
@@ -30,6 +65,13 @@ services:
       - autoserv-net
     depends_on:
       - nodered
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.strapi.rule=Host(`strapi.ti-soft.ru`)"
+      - "traefik.http.routers.strapi.entrypoints=websecure"
+      - "traefik.http.routers.strapi.tls.certresolver=myresolver"
+      - "traefik.http.services.strapi.loadBalancer.server.port=1337"
+    
 
 networks:
   autoserv-net:
