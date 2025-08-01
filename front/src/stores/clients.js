@@ -8,9 +8,11 @@ export const useClientsStore = defineStore('clients', () => {
   async function fetchClients() {
     try {
       const response = await api.get('/clients')
-      clients.value = response.data.data.map(item => ({
+      console.log('API response for clients:', response)  // Added for debugging
+      // Adjusted to match actual response structure (response.data is an array)
+      clients.value = response.data.map(item => ({
         id: item.id,
-        ...item.attributes
+        ...item
       }))
     } catch (error) {
       console.error('Ошибка загрузки клиентов:', error)

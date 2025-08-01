@@ -18,22 +18,8 @@ export default defineConfig({
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
       'Cross-Origin-Embedder-Policy': 'require-corp',
-      'Content-Security-Policy' : "script-src 'self' 'unsafe-inline' mc.yandex.ru yastatic.net 'nonce-erere34r3fdca3df4f'; img-src https://mc.yandex.ru; child-src blob: https://mc.yandex.ru; frame-src blob: https://mc.yandex.ru; frame-ancestors blob: https://mc.yandex.ru;"
+      'Content-Security-Policy' : "script-src 'self' 'unsafe-inline' mc.yandex.ru yastatic.net 'nonce-erere34r3fdca3df4f'; img-src https://mc.yandex.ru https://strapi.ti-soft.ru https://api.ti-soft.ru data: blob:; child-src blob: https://mc.yandex.ru; frame-src blob: https://mc.yandex.ru; frame-ancestors blob: https://mc.yandex.ru;"
 
-    },
-    proxy: {
-      '/binance': {
-        target: 'https://api.binance.com',
-        changeOrigin: true,
-        secure: true,
-        rewrite: (path) => path.replace(/^\/binance/, '/api/v3/exchangeInfo') // Adjusting the path here
-      },
-      '/api': {
-        target: 'http://node-red:1880',
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '') // Adjusting the path here
-      }
     },
     middleware: [
       history({

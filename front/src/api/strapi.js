@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:1337/api', // URL Strapi backend
+  baseURL: 'https://strapi.ti-soft.ru', // Updated URL Strapi backend without /api
   headers: {
     'Content-Type': 'application/json',
   },

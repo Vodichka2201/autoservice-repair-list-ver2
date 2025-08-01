@@ -135,6 +135,8 @@ export default {
     const clientsStore = useClientsStore()
     const clients = clientsStore.clients
 
+    clientsStore.fetchClients()  // Added to load clients on setup
+
     const showAddModal = ref(false)
     const newClient = ref({
       name: '',
