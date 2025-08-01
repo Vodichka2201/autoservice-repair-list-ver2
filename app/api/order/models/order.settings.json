@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "name": "Order"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "client": {
+      "model": "client",
+      "via": "orders"
+    },
+    "car": {
+      "model": "car",
+      "via": "orders"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "new",
+        "in_repair",
+        "completed"
+      ]
+    },
+    "createdAt": {
+      "type": "date"
+    },
+    "updatedAt": {
+      "type": "date"
+    },
+    "repair_monitors": {
+      "via": "order",
+      "collection": "repair-monitor"
+    }
+  }
+}

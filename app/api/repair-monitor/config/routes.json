@@ -2,48 +2,48 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/car-projects",
-      "handler": "car-project.find",
+      "path": "/repair-monitors",
+      "handler": "repair-monitor.find",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/car-projects/count",
-      "handler": "car-project.count",
+      "path": "/repair-monitors/count",
+      "handler": "repair-monitor.count",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/car-projects/:id",
-      "handler": "car-project.findOne",
+      "path": "/repair-monitors/:id",
+      "handler": "repair-monitor.findOne",
       "config": {
         "policies": []
       }
     },
     {
       "method": "POST",
-      "path": "/car-projects",
-      "handler": "car-project.create",
+      "path": "/repair-monitors",
+      "handler": "repair-monitor.create",
       "config": {
         "policies": []
       }
     },
     {
       "method": "PUT",
-      "path": "/car-projects/:id",
-      "handler": "car-project.update",
+      "path": "/repair-monitors/:id",
+      "handler": "repair-monitor.update",
       "config": {
         "policies": []
       }
     },
     {
       "method": "DELETE",
-      "path": "/car-projects/:id",
-      "handler": "car-project.delete",
+      "path": "/repair-monitors/:id",
+      "handler": "repair-monitor.delete",
       "config": {
         "policies": []
       }

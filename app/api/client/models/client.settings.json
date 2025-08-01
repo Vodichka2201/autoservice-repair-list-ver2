@@ -1,8 +1,8 @@
 {
   "kind": "collectionType",
-  "collectionName": "cars",
+  "collectionName": "clients",
   "info": {
-    "name": "Car"
+    "name": "Client"
   },
   "options": {
     "increments": true,
@@ -11,27 +11,27 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "client": {
-      "model": "client",
-      "via": "cars"
-    },
-    "make": {
+    "name": {
       "type": "string"
     },
-    "model": {
+    "phone": {
       "type": "string"
     },
-    "year": {
-      "type": "integer"
+    "email": {
+      "type": "email"
     },
-    "vin": {
-      "type": "string"
+    "address": {
+      "type": "text"
     },
-    "licensePlate": {
-      "type": "string"
+    "registrationDate": {
+      "type": "date"
+    },
+    "cars": {
+      "via": "client",
+      "collection": "car"
     },
     "orders": {
-      "via": "car",
+      "via": "client",
       "collection": "order"
     }
   }

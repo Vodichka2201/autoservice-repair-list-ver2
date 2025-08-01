@@ -2,48 +2,48 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/workers",
-      "handler": "worker.find",
+      "path": "/clients",
+      "handler": "client.find",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/workers/count",
-      "handler": "worker.count",
+      "path": "/clients/count",
+      "handler": "client.count",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/workers/:id",
-      "handler": "worker.findOne",
+      "path": "/clients/:id",
+      "handler": "client.findOne",
       "config": {
         "policies": []
       }
     },
     {
       "method": "POST",
-      "path": "/workers",
-      "handler": "worker.create",
+      "path": "/clients",
+      "handler": "client.create",
       "config": {
         "policies": []
       }
     },
     {
       "method": "PUT",
-      "path": "/workers/:id",
-      "handler": "worker.update",
+      "path": "/clients/:id",
+      "handler": "client.update",
       "config": {
         "policies": []
       }
     },
     {
       "method": "DELETE",
-      "path": "/workers/:id",
-      "handler": "worker.delete",
+      "path": "/clients/:id",
+      "handler": "client.delete",
       "config": {
         "policies": []
       }

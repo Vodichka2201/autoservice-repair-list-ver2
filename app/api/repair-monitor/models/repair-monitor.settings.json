@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "repair_monitors",
+  "info": {
+    "name": "RepairMonitor"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "order": {
+      "model": "order",
+      "via": "repair_monitors"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "in_progress",
+        "done"
+      ]
+    },
+    "notes": {
+      "type": "richtext"
+    },
+    "updatedAt": {
+      "type": "date"
+    }
+  }
+}
