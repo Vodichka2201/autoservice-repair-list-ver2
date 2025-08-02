@@ -126,98 +126,99 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useClientsStore } from '../stores/clients'
 
 export default {
   name: 'Clients',
-  setup() {
-    const clientsStore = useClientsStore()
-    const clients = clientsStore.clients
+    setup() {
+      const clientsStore = useClientsStore()
+      const clients = computed(() => clientsStore.clients)
 
-    clientsStore.fetchClients()  // Added to load clients on setup
+      clientsStore.fetchClients()  // Added to load clients on setup
 
-    const showAddModal = ref(false)
-    const newClient = ref({
-      name: '',
-      phone: '',
-      email: '',
-      address: '',
-    })
-
-    const editingClient = ref(null)
-
-    function openAddModal() {
-      showAddModal.value = true
-      newClient.value = {
+      const showAddModal = ref(false)
+      const newClient = ref({
         name: '',
         phone: '',
         email: '',
         address: '',
-      }
-    }
-
-    function closeAddModal() {
-      showAddModal.value = false
-    }
-
-    function addNewClient() {
-      if (!newClient.value.name.trim() || !newClient.value.phone.trim()) return
-      const clientToAdd = {
-        id: Date.now().toString(),
-        name: newClient.value.name.trim(),
-        phone: newClient.value.phone.trim(),
-        email: newClient.value.email.trim() || '',
-        address: newClient.value.address.trim() || '',
-      }
-      clientsStore.addClient(clientToAdd)
-      closeAddModal()
-    }
-
-    function editClient(client) {
-      editingClient.value = { ...client }
-    }
-
-    function updateClientData() {
-      if (!editingClient.value.name.trim() || !editingClient.value.phone.trim()) return
-      clientsStore.updateClient(editingClient.value.id, {
-        name: editingClient.value.name.trim(),
-        phone: editingClient.value.phone.trim(),
-        email: editingClient.value.email.trim() || '',
-        address: editingClient.value.address.trim() || '',
       })
-      editingClient.value = null
-    }
 
-    function cancelEdit() {
-      editingClient.value = null
-    }
+      const editingClient = ref(null)
 
-    function deleteClient(id) {
-      clientsStore.removeClient(id)
-    }
+      function openAddModal() {
+        showAddModal.value = true
+        newClient.value = {
+          name: '',
+          phone: '',
+          email: '',
+          address: '',
+        }
+      }
 
-    function formatDate(dateStr) {
-      if (!dateStr) return '-'
-      const date = new Date(dateStr)
-      return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
-    }
+      function closeAddModal() {
+        showAddModal.value = false
+      }
 
-    return {
-      clients,
-      showAddModal,
-      newClient,
-      editingClient,
-      openAddModal,
-      closeAddModal,
-      addNewClient,
-      editClient,
-      updateClientData,
-      cancelEdit,
-      deleteClient,
-      formatDate,
-    }
-  },
+      function addNewClient() {
+        if (!newClient.value.name.trim() || !newClient.value.phone.trim()) return
+        const clientToAdd = {
+          id: Date.now().toString(),
+          name: newClient.value.name.trim(),
+          phone: newClient.value.phone.trim(),
+          email: newClient.value.email.trim() || '',
+          address: newClient.value.address.trim() || '',
+        }
+        clientsStore.addClient(clientToAdd)
+        closeAddModal()
+      }
+
+      function editClient(client) {
+        editingClient.value = { ...client }
+      }
+
+      function updateClientData() {
+        if (!editingClient.value.name.trim() || !editingClient.value.phone.trim()) return
+        clientsStore.updateClient(editingClient.value.id, {
+          name: editingClient.value.name.trim(),
+          phone: editingClient.value.phone.trim(),
+          email: editingClient.value.email.trim() || '',
+          address: editingClient.value.address.trim() || '',
+        })
+        editingClient.value = null
+      }
+
+      function cancelEdit() {
+        editingClient.value = null
+      }
+
+      function deleteClient(id) {
+        clientsStore.removeClient(id)
+      }
+
+      function formatDate(dateStr) {
+        if (!dateStr) return '-'
+        const date = new Date(dateStr)
+        return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
+      }
+
+      return {
+        clients,
+        showAddModal,
+        newClient,
+        editingClient,
+        openAddModal,
+        closeAddModal,
+        addNewClient,
+        editClient,
+        updateClientData,
+        cancelEdit,
+        deleteClient,
+        formatDate,
+      }
+    },
+
 }
 </script>
 

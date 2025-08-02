@@ -174,7 +174,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useCarsStore } from '../stores/cars'
 import { useClientsStore } from '../stores/clients'
 
@@ -183,8 +183,11 @@ export default {
   setup() {
     const carsStore = useCarsStore()
     const clientsStore = useClientsStore()
-    const cars = carsStore.cars
+    const cars = computed(() => carsStore.cars)
     const clients = clientsStore.clients
+
+    carsStore.fetchCars()  // Added to load cars on setup
+    clientsStore.fetchClients()  // Added to load clients on setup
 
     const showAddModal = ref(false)
     const showEditModal = ref(false)
@@ -223,7 +226,6 @@ export default {
     function addNewCar() {
       if (!newCar.value.ownerId || !newCar.value.make.trim() || !newCar.value.model.trim() || !newCar.value.year || !newCar.value.vin.trim() || !newCar.value.licensePlate.trim()) return
       const carToAdd = {
-        id: Date.now().toString(),
         ownerId: newCar.value.ownerId,
         make: newCar.value.make.trim(),
         model: newCar.value.model.trim(),
@@ -237,7 +239,7 @@ export default {
       closeAddModal()
     }
 
-    function openEditModal(car) {
+    function editCar(car) {
       editingCar.value = { ...car }
       showEditModal.value = true
     }
@@ -296,7 +298,7 @@ export default {
       openAddModal,
       closeAddModal,
       addNewCar,
-      openEditModal,
+      editCar,
       closeEditModal,
       updateCarData,
       cancelEdit,

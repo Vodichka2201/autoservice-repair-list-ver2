@@ -21,13 +21,16 @@ export const useClientsStore = defineStore('clients', () => {
 
   async function addClient(client) {
     try {
+      console.log('Adding client with data:', client)  // Added for debugging
       if (!client.registrationDate) {
         client.registrationDate = new Date().toISOString().split('T')[0]
       }
       const response = await api.post('/clients', { data: client })
+      console.log('API response for addClient:', response)  // Added for debugging
+      const data = response.data && response.data.data ? response.data.data : response.data
       clients.value.push({
-        id: response.data.data.id,
-        ...response.data.data.attributes
+        id: data.id,
+        ...data.attributes
       })
     } catch (error) {
       console.error('Ошибка добавления клиента:', error)
@@ -40,8 +43,8 @@ export const useClientsStore = defineStore('clients', () => {
       const index = clients.value.findIndex(c => c.id === id)
       if (index !== -1) {
         clients.value[index] = {
-          id: response.data.data.id,
-          ...response.data.data.attributes
+          id: response.data.id,
+          ...response.data
         }
       }
     } catch (error) {
