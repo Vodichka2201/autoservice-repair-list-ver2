@@ -7,6 +7,8 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.filename=/traefik-config.yml"
+      - "--providers.file.watch=true"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
@@ -24,6 +26,7 @@ services:
     volumes:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik-config.yml:/traefik-config.yml:ro"
     restart: always
     networks:
       - autoserv-net
@@ -47,30 +50,6 @@ services:
       - "traefik.http.routers.nodered.entrypoints=websecure"
       - "traefik.http.routers.nodered.tls.certresolver=myresolver"
       - "traefik.http.services.nodered.loadBalancer.server.port=1880"
-    
-  strapi:
-    image: strapi/strapi:latest
-    container_name: autoserv-strapi
-    restart: unless-stopped
-    environment:
-      DATABASE_CLIENT: sqlite
-      DATABASE_NAME: strapi
-      DATABASE_FILENAME: /srv/app/.tmp/data.db
-      NODE_ENV: development
-    volumes:
-      - ./app:/srv/app
-    ports:
-      - "1337:1337"
-    networks:
-      - autoserv-net
-    depends_on:
-      - nodered
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.strapi.rule=Host(`strapi.ti-soft.ru`)"
-      - "traefik.http.routers.strapi.entrypoints=websecure"
-      - "traefik.http.routers.strapi.tls.certresolver=myresolver"
-      - "traefik.http.services.strapi.loadBalancer.server.port=1337"
     
 
 networks:

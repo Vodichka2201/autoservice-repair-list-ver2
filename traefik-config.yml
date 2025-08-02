@@ -1,0 +1,16 @@
+http:
+  routers:
+    strapi:
+      rule: "Host(`strapi.ti-soft.ru`)"
+      service: strapi
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: myresolver
+        
+  services:
+    strapi:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:1337"
+        passHostHeader: true
