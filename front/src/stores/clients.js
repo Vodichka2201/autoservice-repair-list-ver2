@@ -5,23 +5,30 @@ import api from '../api/strapi'
 export const useClientsStore = defineStore('clients', () => {
   const clients = ref([])
 
+  // Преобразует данные клиента согласно API документации
+  function transformClientData(item) {
+    return {
+      id: item.id,
+      name: item.name || 'Без имени',
+      phone: item.phone || 'Не указан',
+      email: item.email || 'Не указан',
+      address: item.address || '',
+      registrationDate: item.registrationDate || new Date().toISOString().split('T')[0],
+      notes: item.notes || '',
+      ...item
+    }
+  }
+
   async function fetchClients() {
     try {
-      const response = await api.get('/api/clients', {
-        headers: {
-          'Accept': 'application/json'
-        }
-      })
+      const response = await api.get('/api/clients')
       
       if (!response.data?.data) {
-        throw new Error('Invalid API response structure')
+        throw new Error('Некорректная структура ответа API')
       }
 
       clients.value = Array.isArray(response.data.data) 
-        ? response.data.data.map(item => ({
-            id: item.id,
-            ...item.attributes
-          }))
+        ? response.data.data.map(transformClientData)
         : []
     } catch (error) {
       console.error('Ошибка загрузки клиентов:', error)
@@ -32,16 +39,17 @@ export const useClientsStore = defineStore('clients', () => {
 
   async function addClient(client) {
     try {
-      const clientData = { ...client }
-      delete clientData.id
-      if (!clientData.registrationDate) {
-        clientData.registrationDate = new Date().toISOString().split('T')[0]
+      const clientData = {
+        name: client.name || 'Новый клиент',
+        phone: client.phone || '',
+        email: client.email || '',
+        address: client.address || '',
+        registrationDate: client.registrationDate || new Date().toISOString().split('T')[0],
+        notes: client.notes || ''
       }
-      const response = await api.post('/api/clients', { data: clientData })
-      const newClient = {
-        id: response.data.data.id,
-        ...response.data.data.attributes
-      }
+      
+      const response = await api.post('/api/clients', clientData)
+      const newClient = transformClientData(response.data.data)
       clients.value.push(newClient)
       return newClient
     } catch (error) {
@@ -52,16 +60,23 @@ export const useClientsStore = defineStore('clients', () => {
 
   async function updateClient(id, updatedClient) {
     try {
-      const response = await api.put(`/api/clients/${id}`, { data: updatedClient })
+      const clientData = {
+        name: updatedClient.name,
+        phone: updatedClient.phone,
+        email: updatedClient.email,
+        address: updatedClient.address,
+        registrationDate: updatedClient.registrationDate,
+        notes: updatedClient.notes
+      }
+      
+      const response = await api.put(`/api/clients/${id}`, clientData)
       const index = clients.value.findIndex(c => c.id === id)
       if (index !== -1) {
-        clients.value[index] = {
-          id: response.data.data.id,
-          ...response.data.data.attributes
-        }
+        clients.value[index] = transformClientData(response.data.data)
       }
     } catch (error) {
       console.error('Ошибка обновления клиента:', error)
+      throw error
     }
   }
 
@@ -71,6 +86,7 @@ export const useClientsStore = defineStore('clients', () => {
       clients.value = clients.value.filter(c => c.id !== id)
     } catch (error) {
       console.error('Ошибка удаления клиента:', error)
+      throw error
     }
   }
 
