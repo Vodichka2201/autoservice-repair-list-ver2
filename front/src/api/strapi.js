@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuthStore } from '@/stores/auth';
 
 const api = axios.create({
-  baseURL: 'https://strapi.ti-soft.ru/api',
+  baseURL: '', // Using empty baseURL since proxy handles the full path
   headers: {
     'Content-Type': 'application/json',
   },

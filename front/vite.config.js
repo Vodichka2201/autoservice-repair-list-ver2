@@ -13,9 +13,33 @@ export default defineConfig({
   server: {
     host: true,
     allowedHosts: 'all',
-    port: 3000, 
+    port: 3000,
     cors: false,
     strictPort: true,
+    proxy: {
+      '/api': {
+        target: 'https://strapi.ti-soft.ru',
+        changeOrigin: true,
+        secure: false,
+        rewrite: path => path.replace(/^\/api/, '/api'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        bypass: (req) => {
+          if (req.headers.accept?.indexOf('html') !== -1) {
+            return '/index.html'
+          }
+        }
+      }
+    },
+
+
+
+
+
+
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
       'Cross-Origin-Embedder-Policy': 'require-corp',
