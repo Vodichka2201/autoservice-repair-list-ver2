@@ -161,17 +161,25 @@ export default {
         showAddModal.value = false
       }
 
-      function addNewClient() {
+      async function addNewClient() {
         if (!newClient.value.name.trim() || !newClient.value.phone.trim()) return
         const clientToAdd = {
-          id: Date.now().toString(),
           name: newClient.value.name.trim(),
           phone: newClient.value.phone.trim(),
           email: newClient.value.email.trim() || '',
           address: newClient.value.address.trim() || '',
         }
-        clientsStore.addClient(clientToAdd)
+        const result = await clientsStore.addClient(clientToAdd)
+        if (result) {
+          newClient.value = {
+            name: '',
+            phone: '',
+            email: '',
+            address: '',
+          }
+        }
         closeAddModal()
+
       }
 
       function editClient(client) {

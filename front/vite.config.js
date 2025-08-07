@@ -12,13 +12,14 @@ export default defineConfig({
   },
   server: {
     host: true,
+    allowedHosts: 'all',
     port: 3000, 
     cors: false,
     strictPort: true,
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
       'Cross-Origin-Embedder-Policy': 'require-corp',
-      'Content-Security-Policy' : "script-src 'self' 'unsafe-inline' mc.yandex.ru yastatic.net 'nonce-erere34r3fdca3df4f'; img-src https://mc.yandex.ru https://strapi.ti-soft.ru https://api.ti-soft.ru http://localhost:3000 https://localhost:3000 data: blob:; child-src blob: https://mc.yandex.ru; frame-src blob: https://mc.yandex.ru; frame-ancestors blob: https://mc.yandex.ru;"
+      'Content-Security-Policy' : "script-src 'self' 'unsafe-inline' samuradm.ti-soft.ru mc.yandex.ru yastatic.net http://localhost:3000 https://localhost:3000 'nonce-erere34r3fdca3df4f'; img-src 'self' samuradm.ti-soft.ru https://mc.yandex.ru https://strapi.ti-soft.ru https://api.ti-soft.ru http://localhost:3000 https://localhost:3000 data: blob: https:; child-src blob: https://mc.yandex.ru; frame-src blob: https://mc.yandex.ru; frame-ancestors blob: https://mc.yandex.ru; connect-src 'self' samuradm.ti-soft.ru strapi.ti-soft.ru api.ti-soft.ru localhost:3000;"
     },
     middleware: [
       history({

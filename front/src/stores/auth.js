@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia'
-
-const ADMIN_EMAIL = 'login'
-const ADMIN_PASSWORD = '1q2w!Q@W'
+import api from '@/api/strapi'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
+    token: null,
     loading: false,
     error: null,
     status: 'out' // 'loading' | 'in' | 'out'
@@ -19,11 +18,21 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async init() {
-      // Check if user data exists in localStorage
+      this.loading = true
       const userData = localStorage.getItem('user')
-      if (userData) {
-        this.user = JSON.parse(userData)
-        this.status = 'in'
+      const token = localStorage.getItem('jwt')
+      
+      if (userData && token) {
+        try {
+          // Verify token is still valid
+          this.user = JSON.parse(userData)
+          this.token = token
+          await api.get('/users/me') // Validate token
+          this.status = 'in'
+        } catch (error) {
+          console.error('Token validation failed:', error)
+          this.logout() // Clear invalid session
+        }
       } else {
         this.status = 'out'
       }
@@ -36,25 +45,62 @@ export const useAuthStore = defineStore('auth', {
       this.error = null
       
       try {
-        // Simple email/password validation
-        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-          const user = {
-            email: ADMIN_EMAIL,
-            id: 'admin-id'
-          }
-          this.user = user
-          this.status = 'in'
-          // Store user data in localStorage
-          localStorage.setItem('user', JSON.stringify(user))
-          return user
-        } else {
-          throw new Error('Неверный email или пароль')
-        }
+        const response = await api.post('/auth/local', {
+          identifier: email,
+          password: password
+        })
+        
+        this.user = response.data.user
+        this.token = response.data.jwt
+        this.status = 'in'
+        
+        // Store auth data with expiration check
+        localStorage.setItem('user', JSON.stringify({
+          ...this.user,
+          expiresAt: Date.now() + (7 * 24 * 60 * 60 * 1000) // 7 days
+        }))
+        localStorage.setItem('jwt', this.token)
+        
+        // Set up token refresh timer
+        this.scheduleTokenRefresh()
+        
+        return this.user
       } catch (error) {
-        this.error = error.message
+        this.error = error.response?.data?.error?.message || 
+                    error.message || 
+                    'Login failed'
         throw error
       } finally {
         this.loading = false
+      }
+    },
+
+    scheduleTokenRefresh() {
+      // Clear existing timer if any
+      if (this.refreshTimer) {
+        clearTimeout(this.refreshTimer)
+      }
+      
+      // Set new timer to refresh token 1 hour before expiration
+      this.refreshTimer = setTimeout(() => {
+        this.refreshToken()
+      }, 6 * 60 * 60 * 1000) // 6 hours
+    },
+
+    async refreshToken() {
+      if (!this.token) return
+      
+      try {
+        const response = await api.post('/token/refresh', {
+          token: this.token
+        })
+        
+        this.token = response.data.jwt
+        localStorage.setItem('jwt', this.token)
+        this.scheduleTokenRefresh()
+      } catch (error) {
+        console.error('Token refresh failed:', error)
+        this.logout()
       }
     },
 
@@ -63,7 +109,9 @@ export const useAuthStore = defineStore('auth', {
       this.error = null
       try {
         localStorage.removeItem('user')
+        localStorage.removeItem('jwt')
         this.user = null
+        this.token = null
         this.status = 'out'
       } catch (error) {
         this.error = error.message

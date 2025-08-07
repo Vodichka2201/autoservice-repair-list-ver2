@@ -16,9 +16,6 @@ services:
       #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - "--certificatesresolvers.myresolver.acme.email=ax.rudin@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
       - "--serverstransport.insecureskipverify=true"
     ports:
       - "80:80"
@@ -50,7 +47,7 @@ services:
       - "traefik.http.routers.nodered.entrypoints=websecure"
       - "traefik.http.routers.nodered.tls.certresolver=myresolver"
       - "traefik.http.services.nodered.loadBalancer.server.port=1880"
-    
+
 
 networks:
   autoserv-net:

@@ -9,10 +9,10 @@ export const useClientsStore = defineStore('clients', () => {
     try {
       const response = await api.get('/clients')
       console.log('API response for clients:', response)  // Added for debugging
-      // Adjusted to match actual response structure (response.data is an array)
-      clients.value = response.data.map(item => ({
+      // Adjusted for Strapi v4 response structure (response.data.data contains array)
+      clients.value = response.data.data.map(item => ({
         id: item.id,
-        ...item
+        ...item.attributes
       }))
     } catch (error) {
       console.error('Ошибка загрузки клиентов:', error)
@@ -22,16 +22,20 @@ export const useClientsStore = defineStore('clients', () => {
   async function addClient(client) {
     try {
       console.log('Adding client with data:', client)  // Added for debugging
-      if (!client.registrationDate) {
-        client.registrationDate = new Date().toISOString().split('T')[0]
+      // Create clean client data without id and with proper date
+      const clientData = { ...client }
+      delete clientData.id
+      if (!clientData.registrationDate) {
+        clientData.registrationDate = new Date().toISOString().split('T')[0]
       }
-      const response = await api.post('/clients', { data: client })
+      const response = await api.post('/clients', { data: clientData })
       console.log('API response for addClient:', response)  // Added for debugging
-      const data = response.data && response.data.data ? response.data.data : response.data
-      clients.value.push({
-        id: data.id,
-        ...data.attributes
-      })
+      const newClient = {
+        id: response.data.data.id,
+        ...response.data.data.attributes
+      }
+      clients.value.push(newClient)
+      return newClient
     } catch (error) {
       console.error('Ошибка добавления клиента:', error)
     }
@@ -43,8 +47,8 @@ export const useClientsStore = defineStore('clients', () => {
       const index = clients.value.findIndex(c => c.id === id)
       if (index !== -1) {
         clients.value[index] = {
-          id: response.data.id,
-          ...response.data
+          id: response.data.data.id,
+          ...response.data.data.attributes
         }
       }
     } catch (error) {
