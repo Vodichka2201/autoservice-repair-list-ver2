@@ -5,7 +5,7 @@ import api from '../api/strapi'
 export const useClientsStore = defineStore('clients', () => {
   const clients = ref([])
 
-  // Преобразует данные клиента согласно API документации
+  // Для Strapi 5 данные приходят напрямую, без обертки в attributes
   function transformClientData(item) {
     return {
       id: item.id,
@@ -23,13 +23,16 @@ export const useClientsStore = defineStore('clients', () => {
     try {
       const response = await api.get('/api/clients')
       
-      if (!response.data?.data) {
+      // Handle both direct array response and { data: [...] } format
+      const responseData = Array.isArray(response.data) 
+        ? response.data 
+        : response.data?.data
+        
+      if (!Array.isArray(responseData)) {
         throw new Error('Некорректная структура ответа API')
       }
 
-      clients.value = Array.isArray(response.data.data) 
-        ? response.data.data.map(transformClientData)
-        : []
+      clients.value = responseData.map(transformClientData)
     } catch (error) {
       console.error('Ошибка загрузки клиентов:', error)
       clients.value = []
@@ -48,8 +51,13 @@ export const useClientsStore = defineStore('clients', () => {
         notes: client.notes || ''
       }
       
-      const response = await api.post('/api/clients', clientData)
-      const newClient = transformClientData(response.data.data)
+      const response = await api.post('/api/clients', clientData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      const newClient = transformClientData(response.data)
       clients.value.push(newClient)
       return newClient
     } catch (error) {
@@ -72,7 +80,7 @@ export const useClientsStore = defineStore('clients', () => {
       const response = await api.put(`/api/clients/${id}`, clientData)
       const index = clients.value.findIndex(c => c.id === id)
       if (index !== -1) {
-        clients.value[index] = transformClientData(response.data.data)
+        clients.value[index] = transformClientData(response.data)
       }
     } catch (error) {
       console.error('Ошибка обновления клиента:', error)
